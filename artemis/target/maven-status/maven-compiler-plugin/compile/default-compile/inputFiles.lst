@@ -1,0 +1,14 @@
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/controller/ApiResponseMessage.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/Status.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/CaseParticipant.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/CaseRawAttachments.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/controller/ApiOriginFilter.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/CaseApplication.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/Application.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/ActivityStatusRestriction.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/CaseRequest.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/controller/ApiException.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/Entity.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/CaseRawData.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/controller/CaserequestApi.java
+/home/vmiranda/Proyectos/BAWAG/artemis-applications/artemis/src/main/java/com/artemis/application/domain/Activity.java

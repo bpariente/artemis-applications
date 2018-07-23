@@ -1,0 +1,3 @@
+com/artemis/applications/ClientServiceApplication.class
+com/artemis/applications/domain/Client.class
+com/artemis/applications/controller/ClientController.class

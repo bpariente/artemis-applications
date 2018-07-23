@@ -1,0 +1,578 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Applications REST API'
+  description: 'Service application to trace the requests received from channel to conductor'
+
+################################################################################
+#
+# Host, Base Path, Schemes and Content Types
+#
+################################################################################
+host: localhost
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /wf-applications/v1
+produces:
+  - application/json
+
+################################################################################
+#
+# Paths
+#
+################################################################################
+paths:
+  /caserequest:
+    post:
+      operationId: createCaseRequest
+      tags: 
+        - CaseRequest
+      summary: 'Create Case Request'
+      description: 'Creates a Case Request'
+      consumes:
+        - application/json
+      parameters:
+        - name: data
+          in: body
+          description: 'Create CaseRequest'
+          required: true
+          schema:
+            $ref: '#/definitions/case-request'
+      responses:
+          200:
+            description: Empty response when successful creation
+            schema:
+              $ref: '#/definitions/case-request'
+          400:
+            description: 'application error'
+          404:
+            description: 'data is not valid'
+          500:
+            description: 'business or technical error'
+
+  /caserequest/{id_caserequest}:
+    get:
+      operationId: getCaseRequest
+      tags:
+        - CaseRequest
+      summary: 'Retrieve Case Request by id'
+      description: 'Returns the case request'
+      parameters:
+        - $ref: '#/definitions/case-request/id'
+      responses:
+          200:
+            description: 'Retrieved Case Request based on the given id'
+            schema:
+              $ref: '#/definitions/case-request'
+          400:
+            description: 'application error'
+          404:
+            description: 'basic data not found'
+          500:
+            description: 'business or technical error'
+
+  /caserequest/{id_caserequest}/applications:
+    post:
+      operationId: createApplication
+      tags:
+        - CreateApplication
+      summary: 'Create Application on Case Request'
+      description: 'Create Application on Case Request based on the given ID Case Request'
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/definitions/case-request/id'
+        - name: data
+          in: body
+          description: 'Create Application of Case Request'
+          required: true
+          schema:
+            $ref: '#/definitions/case-application'
+      responses:
+          200:
+            description: Empty response when successful creation
+            schema:
+              $ref: '#/definitions/case-application'
+          400:
+            description: 'application error'
+          404:
+            description: 'application data is not updated'
+          500:
+            description: 'business or technical error'
+
+  /caserequest/{id_caserequest}/applications/{id_application}:
+    get:
+      operationId: getCaseRequest
+      tags:
+        - CaseRequest
+      summary: 'Retrieve Case Request by id'
+      description: 'Returns the case request'
+      parameters:
+        - $ref: '#/parameters/case-request/id'
+        - $ref: '#/parameters/case-application/id'
+      responses:
+          200:
+            description: 'Retrieved Case Request based on the given id'
+            schema:
+              - $ref: '#/definitions/case-request'
+              - $ref: '#/definitions/case-application'
+          400:
+            description: 'application error'
+          404:
+            description: 'basic data not found'
+          500:
+            description: 'business or technical error'
+
+#  /caserequest/applications/{id_application}:
+#    put:
+#      operationId: getCustomerBasicData
+#      tags:
+#        - CustomerBasicData
+#      summary: 'Retrieve Customer Basic Data'
+#      description: 'Returns Customer Basic Data; Calls P011'
+#      parameters:
+#        - $ref: '#/parameters/customerEntity'
+#        - $ref: '#/parameters/customerNumber'
+#      responses:
+#          200:
+#            description: 'Retrieved Customer Basic Data based on the given request'
+#            schema:
+#              $ref: '#/definitions/GetCustomerBasicDataResponse'
+#          400:
+#            description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#          404:
+#            description: 'Basic Data not found'
+#          500:
+#            description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+
+  /caserequest/raw-data/{id_raw-data}:
+    get:
+      operationId: getCustomerAdditionalData
+      tags:
+        - CustomerAdditionalData
+      summary: 'Retrieve Customer Additional Data'
+      parameters:
+        - $ref: '#/parameters/customerEntity'
+        - $ref: '#/parameters/customerNumber'
+      responses:
+          200:
+            description: 'Retrieved Customer Addional Data like KOKU number, etc.'
+            schema:
+              $ref: '#/definitions/GetCustomerAdditionalDataResponse'
+          400:
+            description: 'Application error - Verify the BAWAG specific headers for detailed information'
+          404:
+            description: 'Additional Data not found. Probably customer does not exixt.'
+          500:
+            description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /caserequest/raw-data:
+#        post:
+#          operationId: createLegalEntity
+#          tags:
+#            - CustomerBasicData
+#          summary: 'Create Customer Basic Data for legal entity'
+#          description: 'Creates a Customer Basic Data; Calls P011'
+#          consumes:
+#            - application/json
+#          parameters:
+#            - name: wsRequest
+#              in: body
+#              description: 'Create Customer Basic Data Request'
+#              required: true
+#              schema:
+#                $ref: '#/definitions/CreateLegalEntityRequest'
+#          responses:
+#              200:
+#                description: Empty response when successful creation
+#                schema:
+#                  $ref: '#/definitions/CreateLegalEntityResponse'
+#              400:
+#                description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#              404:
+#                description: 'Customer Basic Data is not updated'
+#              500:
+#                description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /caserequest/attachments/{id_attachments}:
+#    get:
+#      operationId: findCustomers
+#      tags:
+#        - FindCustomers
+#      summary: 'Find Customers'
+#      description: 'Facilitates Customer Information Retrieval; Calls P027'
+#      parameters:
+#        - name: name
+#          in: query
+#          description: 'Customer Surname'
+#          required: true
+#          type: string
+#        - name: firstName
+#          in: query
+#          description: 'Customer First Name'
+#          required: false
+#          type: string
+#        - name: birthDate
+#          in: query
+#          description: 'Customer Birthdate'
+#          required: false
+#          type: string
+#          format: date
+#        - name: registerNumber
+#          in: query
+#          description: 'Customer Register Number'
+#          required: false
+#          type: string
+#        - name: phoneticSearch
+#          in: query
+#          description: 'Phonetic search flag'
+#          required: false
+#          type: boolean
+#        - name: postalCode
+#          in: query
+#          description: 'Postal Code'
+#          required: false
+#          type: string
+#        - name: street
+#          in: query
+#          description: 'Street'
+#          required: false
+#          type: string
+#        - name: oenbId
+#          in: query
+#          description: 'OeNB Identification number'
+#          required: false
+#          type: string
+#        - name: maxHostCalls
+#          in: query
+#          description: '1 Hostcall resembles 50 returned results'
+#          required: false
+#          type: integer
+#          format: int32
+#      responses:
+#          200:
+#            description: 'Contains the list of Customer Short Infos.'
+#            schema:
+#              $ref: '#/definitions/SearchCustomerDataResponse'
+#          400:
+#            description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#          404:
+#            description: 'Account not found'
+#          500:
+#            description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /caserequest/attachments:
+#    post:
+#      post:
+#        operationId: createLegalEntity
+#        tags:
+#          - CustomerBasicData
+#        summary: 'Create Customer Basic Data for legal entity'
+#        description: 'Creates a Customer Basic Data; Calls P011'
+#        consumes:
+#          - application/json
+#        parameters:
+#          - name: wsRequest
+#            in: body
+#            description: 'Create Customer Basic Data Request'
+#            required: true
+#            schema:
+#              $ref: '#/definitions/CreateLegalEntityRequest'
+#        responses:
+#            200:
+#              description: Empty response when successful creation
+#              schema:
+#                $ref: '#/definitions/CreateLegalEntityResponse'
+#            400:
+#              description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#            404:
+#              description: 'Customer Basic Data is not updated'
+#            500:
+#              description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /caserequest/participants-data/{id_participants}:
+#    get:
+#      operationId: 'getCustomerHouseholdCalculation'
+#      tags:
+#        - CustomerHouseholdCalculation
+#      summary: 'Get Household Calculation'
+#      description: 'Retrieve the Customer household calculation data; Calls P051.'
+#      parameters:
+#        - $ref: '#/parameters/customerEntity'
+#        - $ref: '#/parameters/customerNumber'
+#        - $ref: '#/parameters/iban'
+#        - $ref: '#/parameters/yyWorkflowProcess'
+#      responses:
+#        200:
+#          description: 'Retrieved Customer Household Calculation based on the given request'
+#          schema:
+#            $ref: '#/definitions/GetCustomerHouseholdCalculationResponse'
+#        400:
+#          description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#        404:
+#          description: 'Household calculation not found'
+#        500:
+#          description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /admin-task/entity/{id_entity}:
+#    get:
+#      operationId: 'getCustomerContactData'
+#      tags:
+#        - CustomerContactData
+#      summary: 'Get Customer Contact Data List'
+#      description: 'Reads list of customer contact-data.'
+#      parameters:
+#        - $ref: '#/parameters/customerEntity'
+#        - $ref: '#/parameters/customerNumber'
+#        - name: contactNumber
+#          in: query
+#          required: false
+#          type: integer
+#          format: int32
+#        - name: isActiveOnly
+#          in: query
+#          required: false
+#          type: boolean
+#        - name: isLatestOnly
+#          in: query
+#          required: false
+#          type: boolean
+#        - name: includeHidden
+#          in: query
+#          required: false
+#          type: boolean
+#      responses:
+#        200:
+#          description: 'Get Customer Contact Data Response (might be empty)'
+#          schema:
+#            $ref: '#/definitions/GetCustomerContactDataResponse'
+#        400:
+#          description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#        404:
+#          description: 'Account not found'
+#        500:
+#          description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /admin-task/activity:
+#    get:
+#      operationId: 'getCustomerEconomicEnvironment'
+#      tags:
+#        - CustomerEconomicEnvironment
+#      summary: 'Get Person Economic Environment'
+#      description: 'Retrieves the data related to Economic Environment.'
+#      parameters:
+#        - $ref: '#/parameters/customerEntity'
+#        - $ref: '#/parameters/customerNumber'
+#        - $ref: '#/parameters/iban'
+#        - $ref: '#/parameters/yyWorkflowProcess'
+#      responses:
+#        200:
+#          description: 'Get Person Economic Environment Response (might be empty)'
+#          schema:
+#            $ref: '#/definitions/GetCustomerEconomicEnvironmentResponse'
+#        400:
+#          description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#        404:
+#          description: 'Account not found'
+#        500:
+#          description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  /admin-task/status:
+#    get:
+#      operationId: getCustomerPromotionCodes
+#      tags:
+#        - CustomerPromotionCodes
+#      summary: 'Retrieve Customer Promotions'
+#      description: 'Faciliates Customer Promotions Retrieval; Calls P127'
+#      parameters:
+#        - $ref: '#/parameters/customerEntity'
+#        - $ref: '#/parameters/promotionCode'
+#      responses:
+#          200:
+#            description: 'Retrieves list of found promotions for the given code, or empty if none found'
+#            schema:
+#              $ref: '#/definitions/GetCustomerPromotionCodesResponse'
+#          400:
+#            description: 'Application error - Verify the BAWAG specific headers for detailed information'
+#          404:
+#            description: 'Customer Promotion Data not found'
+#          500:
+#            description: 'Business or technical error - See x-bawagpsk-errors header for detailed information'
+#
+#  Error:
+#    type: object
+#    properties:
+#      code:
+#        type: integer
+#        format: int32
+#      message:
+#        type: string
+#      fields:
+#        type: string
+#
+#
+
+#  BaseCustomerBasicData:
+#    type: object
+
+definitions:
+
+  entity:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'id of the entity'
+        example: '0100'
+      description:
+        type: string
+        description: 'Entity'
+        example: '0100'
+
+  case-request:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'ID of Case Request'
+        example: '0100'
+      entity:
+        $ref: '#/definitions/entity'
+        creation-date:
+        type: date-time
+        description: 'Creation date of the case request'
+        example: '2017-07-21T17:32:28Z'
+      creation-user:
+        type: string
+        description: 'Creation user of the case request'
+        example: 'Al'
+      modification-date:
+        type: date-time
+        description: 'Modification date of the case request'
+        example: '2017-07-21T17:32:28Z'
+      modification-user:
+        type: string
+        description: 'Modification date of the case request'
+        example: 'Ed'
+
+  case-raw-data:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 'id of case raw-data'
+        example: '0100'
+      raw:
+        type: object
+        description: 'object JSON'
+        example: '{"name":"John"}'
+
+  case-raw-attachment:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 'id of case raw-attachment'
+        example: '1231'
+      seq-id:
+        type: string
+        description: 'seq id of case raw-attachment'
+        example: '1'
+      data:
+        type: string
+        description: ''
+        example: ''
+      metadata:
+        type: object
+        description: 'object JSON'
+        example: '{"timestamp_creation_user": "2017-07-21T17:32:28Z"}'
+
+  case-participant:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 'id of case participant'
+        example: '0100'
+      participants-data:
+        type: object
+        description: 'jsonB'
+        example: '{"participants": ["John","Al","Ed"]}'
+
+  case-application:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 'id of case application'
+        example: '0100'
+      app-seq:
+        type: object
+        description: ''
+        example: ''
+      business-process:
+        type: string
+        description: ''
+        example: ''
+      status:
+        $ref: '#/definitions/status'
+      creation-date:
+        type: date-time
+        description: 'Creation date of the case request'
+        example: '2017-07-21T17:32:28Z'
+      creation-user:
+        type: string
+        description: 'Creation user of the case request'
+        example: 'Ferris'
+      modification-date:
+        type: date-time
+        description: 'Modification date of the case request'
+        example: '2017-07-21T17:32:28Z'
+      modification-user:
+        type: string
+        description: 'Modification date of the case request'
+        example: 'Tom'
+
+  status:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'id of case raw-data'
+        example: '0100'
+      description:
+        type: integer
+        description: 'id of case raw-data'
+        example: '0100'
+
+  activity:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'id of case raw-data'
+        example: '0100'
+      description:
+        type: integer
+        description: 'id of case raw-data'
+        example: '0100'
+
+  activity-status-restriction:
+      type: object
+      properties:
+        id-activity-status:
+          type: string
+          description: 'id of activity-status'
+          example: '0100'
+        index-main-activity-status-restriction:
+          type: integer
+          description: 'index of activity-status'
+          example: '0100'
+        id-status:
+          $ref: '#/definitions/status'
+        id-activity:
+          $ref: '#/definitions/activity'
+
+
